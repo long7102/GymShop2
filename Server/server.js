@@ -6,6 +6,7 @@ import ProductRoute from "./Routes/ProductRoutes.js"
 import { errorHandler, notFound } from "./Middleware/Errors.js"
 import userRouter from "./Routes/UserRoutes.js"
 import orderRouter from "./Routes/orderRoutes.js"
+const _dirname = path.resolve()
 
 dotenv.config()
 connectDatabase()
@@ -20,6 +21,11 @@ app.use("/api/orders", orderRouter)
 app.get("/api/config/paypal", (req,res) => {
     res.send(process.env.PAYPAL_CLIENT_ID)
 })
+app.use(express.static(path.join(_dirname, "/frontend/dist")))
+app.get('*', (_,res) => {
+    res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"))
+})
+
 
 //Lỗi
 app.use(notFound)
